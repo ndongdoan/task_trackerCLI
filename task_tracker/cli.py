@@ -107,7 +107,7 @@ def get_database(database_path: str) -> dict[str, dict]:
 
 
 #Methods
-#Add tasks to the database
+#Add task to the database
 def add(database: dict[str, dict], description: str) -> None:
     today: str = datetime.today().isoformat(sep=" ", timespec="seconds")
     id: str = str(int(max("0", *database.keys())) + 1)
@@ -120,12 +120,12 @@ def add(database: dict[str, dict], description: str) -> None:
     }
     list_task({id: database[id]})
 
-#Delete tasks and update the ID
+#Delete task
 def delete(database: dict[str, dict], id: str) -> None:
     list_task({id: database[id]})
     del(database[id])
 
-#Update the description and status of the task
+#Update description of the task
 def update(database: dict[str, dict], id: str, description: str) -> None:
     database[id]["Description"] = description
     database[id]["Updated-at"] = datetime.today().isoformat(sep = " ", timespec="seconds")
@@ -143,7 +143,7 @@ def done(database: dict[str, dict], id: str) -> None:
     database[id]["Updated-at"] = datetime.today().isoformat(sep = " ", timespec="seconds")
     list_task({id: database[id]})
 
-#List current tasks in the database
+#List current tasks in the database/filter them by status
 def list_task(database: dict[str, dict], status="all") -> None:
     header = ["ID", "Description", "Status", "Created-at", "Updated-at"]
     table = []
