@@ -30,36 +30,36 @@ def supported_cmd() -> dict[str, dict]:
             "do": add,
             "help": "Add a new task",
             "args": [
-                {"name": "description", "help": "Description of the new task"}
+                {"name": ["description"], "help": "Description of the new task"}
             ]
         },
         "delete": {
             "do": delete,
             "help": "Delete a task",
             "args": [
-                {"name": "id", "help": "ID of the task"}
+                {"name": ["id"], "help": "ID of the task"}
             ]
         },
         "update": {
             "do": update,
             "help": "Update a task",
             "args": [
-                {"name": "id", "help": "ID of the task"},
-                {"name": "description", "help": "New description of the task"}
+                {"name": ["id"], "help": "ID of the task"},
+                {"name": ["description"], "help": "New description of the task"}
             ]
         },
         "mark-in-progress": {
             "do": in_progress,
             "help": "Mark a task as in-progress",
             "args": [
-                {"name": "id", "help": "ID of the task"}
+                {"name": ["id"], "help": "ID of the task"}
             ]
         },
         "mark-done": {
             "do": done,
             "help": "Mark a task as done",
             "args": [
-                {"name": "id", "help": "ID of the task"}
+                {"name": ["id"], "help": "ID of the task"}
             ]
         },
         "list": {
@@ -67,10 +67,10 @@ def supported_cmd() -> dict[str, dict]:
             "help": "List tasks based on their status",
             "args": [
                 {
-                    "name": "--status",
+                    "name": ["-s", "--status"],
+                    "help": "Filter tasks by status (default = all)",
                     "choices": ["all", "todo", "in-progress", "done"],
-                    "default": "all",
-                    "help": "Filter tasks by status"
+                    "default": "all",                   
                 }
             ]
         }
@@ -84,7 +84,7 @@ def get_input(cmd_dict: dict[str, dict]) -> tuple[Callable, dict]:
     for cmd, details in cmd_dict.items():
         cmd_parser = sub_parser.add_parser(cmd, help=details["help"])
         for a in details["args"]:
-            cmd_parser.add_argument(a["name"], **{k: v for k, v in a.items() if k != "name"})
+            cmd_parser.add_argument(*a["name"], **{k: v for k, v in a.items() if k != "name"})
     
     arguments = parser.parse_args().__dict__
     inp: Callable = cmd_dict[arguments.pop("command")]["do"]
